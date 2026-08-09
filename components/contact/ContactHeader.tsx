@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import Link from "next/link";
+import Logo from "../common/Logo";
 
 interface PageHeaderProps {
   title: string;
@@ -14,7 +15,7 @@ export default function PageHeader({ title, description }: PageHeaderProps) {
       transition={{ duration: 0.5 }}
       className="mb-10 text-center md:text-left"
     >
-      <div className="flex items-center gap-2 mb-6">
+      {/* <div className="flex items-center gap-2 mb-6">
         <h1 className="flex leading-none text-3xl tracking-tighter font-mono">
           <Link href={"/"}>
             <strong className="font-bold">
@@ -22,7 +23,8 @@ export default function PageHeader({ title, description }: PageHeaderProps) {
             </strong>
           </Link>
         </h1>
-      </div>
+      </div> */}
+      <Logo />
 
       <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-zinc-100 mb-4">
         {title}

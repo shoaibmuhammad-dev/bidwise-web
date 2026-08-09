@@ -21,8 +21,6 @@ interface Props {
 export default function ResultSection({ result }: Props) {
   const tier = scoreTier(result.overallScore);
   const tierStyle = TIER_STYLES[tier];
-  console.log(result);
-
   const resultSectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

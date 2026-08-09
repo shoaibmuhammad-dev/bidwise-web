@@ -43,7 +43,7 @@ export default function ContactPage() {
       setErrorMessage("");
 
       try {
-        const response = await fetch(`${BASE_URL}/contact`, {
+        const response = await fetch(`/api/contact`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export default function ContactPage() {
       <main className="flex-1 w-full max-w-4xl mx-auto px-6 py-12 md:py-20 z-10 relative">
         <PageHeader
           title="Contact Us"
-          description="Have questions about bidwise or need support with your account? Fill out the form below and we'll get back to you as soon as possible."
+          description="Have questions about bidwise or need support? Fill out the form below and we'll get back to you as soon as possible."
         />
 
         <motion.div
@@ -209,7 +209,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={submitStatus === "loading"}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 disabled:opacity-70 disabled:cursor-not-allowed group w-full sm:w-auto"
+                className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 disabled:opacity-70 disabled:cursor-not-allowed group w-full sm:w-auto cursor-pointer"
               >
                 {submitStatus === "loading" ? (
                   <>
