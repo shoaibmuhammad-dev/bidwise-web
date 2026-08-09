@@ -15,9 +15,6 @@ export default function BetaBanner() {
       </div>
 
       <p className="text-sm text-orange-200/80 leading-relaxed flex-1">
-        {/* bidwise is free while in beta. The browser extension asks for an email
-        after three analyses so we can follow up with users. Paid plans will
-        come later — early users will be told first. */}
         bidwise is free while in beta. After three analyses we'll ask for your
         email so we can follow up and get your feedback. Paid plans will come
         later — early users will be told first.

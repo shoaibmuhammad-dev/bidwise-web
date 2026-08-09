@@ -7,6 +7,7 @@ export type FormData = {
   proposals: string;
   competingBids: string;
   clientHistory: string;
+  userProfileDescription: string;
 };
 
 export interface HourRange {

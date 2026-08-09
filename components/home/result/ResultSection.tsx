@@ -68,8 +68,6 @@ export default function ResultSection({ result }: Props) {
         hoursNote={result.hoursNote}
       />
 
-      {result.bidAdvice && <BidAdvice bidAdvice={result.bidAdvice} />}
-
       {result.subscores?.length ? (
         <OverallScore subscores={result.subscores} />
       ) : null}
@@ -79,6 +77,8 @@ export default function ResultSection({ result }: Props) {
       )}
 
       {result.redFlags.length > 0 && <RedFlags redFlags={result.redFlags} />}
+
+      {result.bidAdvice && <BidAdvice bidAdvice={result.bidAdvice} />}
 
       <Feedback />
     </motion.div>

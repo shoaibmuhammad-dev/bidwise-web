@@ -22,6 +22,7 @@ export default function JobAnalysisForm() {
     proposals: "",
     competingBids: "",
     clientHistory: "",
+    userProfileDescription: "",
   });
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -47,6 +48,7 @@ export default function JobAnalysisForm() {
 
       const response = await fetch(`${BASE_URL}/analyze`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -73,6 +75,23 @@ export default function JobAnalysisForm() {
     }
   };
 
+  const handleClear = () => {
+    setFormData({
+      jobDescription: "",
+      aiUsage: "sometimes",
+      contractType: "fixed-price",
+      budget: "",
+      hourlyRate: "",
+      proposals: "",
+      competingBids: "",
+      clientHistory: "",
+      userProfileDescription: "",
+    });
+
+    setAnalysisResult(null);
+    setErrorMessage("");
+  };
+
   return (
     <>
       {errorMessage && (
@@ -87,6 +106,21 @@ export default function JobAnalysisForm() {
         onSubmit={handleAnalyze}
         className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative"
       >
+        {/* profile description */}
+        {/* Job Description */}
+        <div className="mb-6">
+          <FormLabel>Personal Profile Title + Description</FormLabel>
+
+          <TextArea
+            value={formData.userProfileDescription}
+            onChange={(e) =>
+              handleChange("userProfileDescription", e.target.value)
+            }
+            placeholder="Paste the personal profile description and tech stack and hourly rate."
+            required
+          />
+        </div>
+
         {/* Job Description */}
         <div className="mb-6">
           <FormLabel>Job Title + Description</FormLabel>
@@ -190,7 +224,11 @@ export default function JobAnalysisForm() {
           </div>
         </div>
 
-        <SubmitButtons isAnalyzing={isAnalyzing} />
+        <SubmitButtons
+          isAnalyzing={isAnalyzing}
+          analysisResult={analysisResult}
+          onClear={handleClear}
+        />
       </motion.form>
 
       {analysisResult && <ResultSection result={analysisResult} />}
