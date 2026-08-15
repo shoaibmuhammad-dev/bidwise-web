@@ -19,6 +19,7 @@ export default function Earnings({
   hourlyRate,
   hoursNote,
 }: Props) {
+  console.log(jobValue);
   return (
     <div>
       <h4 className="text-lg font-mono text-zinc-500 uppercase tracking-widest mb-6 border-b border-zinc-800 pb-2">
