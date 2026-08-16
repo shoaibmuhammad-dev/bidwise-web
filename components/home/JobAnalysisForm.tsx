@@ -11,6 +11,7 @@ import SubmitButtons from "./form/SubmitButtons";
 import ResultSection from "./result/ResultSection";
 import { BASE_URL } from "@/lib/baseUrl";
 import { AnalysisResult, FormData } from "@/types/types";
+import ErrorMessage from "./result/ErrorMessage";
 
 export default function JobAnalysisForm() {
   const [formData, setFormData] = useState<FormData>({
@@ -56,12 +57,13 @@ export default function JobAnalysisForm() {
       });
 
       if (!response.ok) {
-        setErrorMessage("An unknown error occurred");
-        throw new Error("Failed to analyze job.");
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.message || "Failed to analyze job. Please try again.",
+        );
       }
 
       const result = await response.json();
-
       setAnalysisResult(result.data);
     } catch (error) {
       // console.log("ERROR >>> ", error);
@@ -94,11 +96,8 @@ export default function JobAnalysisForm() {
 
   return (
     <>
-      {errorMessage && (
-        <div className="w-full bg-red-900/20 border border-red-900/50 text-red-500 rounded-2xl p-6 md:p-8 shadow-2xl relative backdrop-blur-xl mb-8">
-          {errorMessage}
-        </div>
-      )}
+      {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
+
       <motion.form
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
