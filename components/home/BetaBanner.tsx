@@ -15,9 +15,9 @@ export default function BetaBanner() {
       </div>
 
       <p className="text-sm text-orange-200/80 leading-relaxed flex-1">
-        bidwise is free while in beta. After three analyses we'll ask for your
-        email so we can follow up and get your feedback. Paid plans will come
-        later — early users will be told first.
+        bidwise is free while in beta — 3 analyses every 5 hours. We&apos;ll ask
+        for quick feedback after each one to help us improve. Paid plans will
+        come later — early users will be told first.
       </p>
     </motion.div>
   );

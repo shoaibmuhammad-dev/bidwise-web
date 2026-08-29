@@ -41,7 +41,7 @@ export default function Feedback() {
           feedback: values.feedback,
         };
 
-        const response = await fetch(`${BASE_URL}/feedback`, {
+        const response = await fetch(`/api/feedback`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
