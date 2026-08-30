@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description:
       "Paste any Upwork job post and get an instant AI verdict on hours, pay, and red flags before you bid.",
     type: "website",
-    url: "https://bidwise.app", // update to your real domain
+    url: "https://bidwise-ai.vercel.app",
     siteName: "bidwise",
   },
   twitter: {
@@ -44,6 +45,8 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+
+        <Analytics />
       </body>
     </html>
   );
