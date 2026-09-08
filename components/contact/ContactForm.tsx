@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Loader2, Send } from "lucide-react";
 import PageHeader from "./ContactHeader";
-import { BASE_URL } from "@/lib/baseUrl";
 import Success from "./Success";
 import Error from "./Error";
 import Footer from "../home/Footer";
+import Animate from "../common/Animate";
 
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
@@ -96,138 +95,134 @@ export default function ContactPage() {
           description="Have questions about bidwise or need support? Fill out the form below and we'll get back to you as soon as possible."
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative"
-        >
-          {/* Success Message */}
-          {submitStatus === "success" && <Success />}
+        <Animate y={20}>
+          <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative">
+            {/* Success Message */}
+            {submitStatus === "success" && <Success />}
 
-          {/* Error Message */}
-          {submitStatus === "error" && <Error errorMessage={errorMessage} />}
+            {/* Error Message */}
+            {submitStatus === "error" && <Error errorMessage={errorMessage} />}
 
-          <form onSubmit={formik.handleSubmit} className="space-y-6">
-            {/* Name + Email */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Name */}
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3"
-                >
-                  Your Name
-                </label>
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
+              {/* Name + Email */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3"
+                  >
+                    Your Name
+                  </label>
 
-                <input
-                  id="name"
-                  // name="name"
-                  type="text"
-                  autoComplete="name"
-                  disabled={submitStatus === "loading"}
-                  className={`w-full bg-zinc-950 border ${
-                    formik.touched.name && formik.errors.name
-                      ? "border-red-500/50 focus:ring-red-500/50"
-                      : "border-zinc-800 focus:border-emerald-500/50 focus:ring-emerald-500/50"
-                  } rounded-xl px-4 py-3 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
-                  placeholder="John Doe"
-                  {...formik.getFieldProps("name")}
-                />
+                  <input
+                    id="name"
+                    // name="name"
+                    type="text"
+                    autoComplete="name"
+                    disabled={submitStatus === "loading"}
+                    className={`w-full bg-zinc-950 border ${
+                      formik.touched.name && formik.errors.name
+                        ? "border-red-500/50 focus:ring-red-500/50"
+                        : "border-zinc-800 focus:border-emerald-500/50 focus:ring-emerald-500/50"
+                    } rounded-xl px-4 py-3 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
+                    placeholder="John Doe"
+                    {...formik.getFieldProps("name")}
+                  />
 
-                {formik.touched.name && formik.errors.name && (
-                  <div className="text-red-400 text-xs mt-2">
-                    {formik.errors.name}
-                  </div>
-                )}
-              </div>
-
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3"
-                >
-                  Email Address
-                </label>
-
-                <input
-                  id="email"
-                  // name="email"
-                  type="email"
-                  autoComplete="email"
-                  disabled={submitStatus === "loading"}
-                  className={`w-full bg-zinc-950 border ${
-                    formik.touched.email && formik.errors.email
-                      ? "border-red-500/50 focus:ring-red-500/50"
-                      : "border-zinc-800 focus:border-emerald-500/50 focus:ring-emerald-500/50"
-                  } rounded-xl px-4 py-3 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
-                  placeholder="john@example.com"
-                  {...formik.getFieldProps("email")}
-                />
-
-                {formik.touched.email && formik.errors.email && (
-                  <div className="text-red-400 text-xs mt-2">
-                    {formik.errors.email}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Message */}
-            <div>
-              <label
-                htmlFor="message"
-                className="block text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3"
-              >
-                Message
-              </label>
-
-              <textarea
-                id="message"
-                // name="message"
-                rows={5}
-                disabled={submitStatus === "loading"}
-                className={`w-full bg-zinc-950 border ${
-                  formik.touched.message && formik.errors.message
-                    ? "border-red-500/50 focus:ring-red-500/50"
-                    : "border-zinc-800 focus:border-emerald-500/50 focus:ring-emerald-500/50"
-                } rounded-xl p-4 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all resize-none disabled:opacity-50 disabled:cursor-not-allowed`}
-                placeholder="How can we help you?"
-                {...formik.getFieldProps("message")}
-              />
-
-              {formik.touched.message && formik.errors.message && (
-                <div className="text-red-400 text-xs mt-2">
-                  {formik.errors.message}
+                  {formik.touched.name && formik.errors.name && (
+                    <div className="text-red-400 text-xs mt-2">
+                      {formik.errors.name}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* Submit */}
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={submitStatus === "loading"}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 disabled:opacity-70 disabled:cursor-not-allowed group w-full sm:w-auto cursor-pointer"
-              >
-                {submitStatus === "loading" ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-                    Send Message
-                  </>
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3"
+                  >
+                    Email Address
+                  </label>
+
+                  <input
+                    id="email"
+                    // name="email"
+                    type="email"
+                    autoComplete="email"
+                    disabled={submitStatus === "loading"}
+                    className={`w-full bg-zinc-950 border ${
+                      formik.touched.email && formik.errors.email
+                        ? "border-red-500/50 focus:ring-red-500/50"
+                        : "border-zinc-800 focus:border-emerald-500/50 focus:ring-emerald-500/50"
+                    } rounded-xl px-4 py-3 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
+                    placeholder="john@example.com"
+                    {...formik.getFieldProps("email")}
+                  />
+
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="text-red-400 text-xs mt-2">
+                      {formik.errors.email}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Message */}
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-xs font-medium text-zinc-400 uppercase tracking-widest mb-3"
+                >
+                  Message
+                </label>
+
+                <textarea
+                  id="message"
+                  // name="message"
+                  rows={5}
+                  disabled={submitStatus === "loading"}
+                  className={`w-full bg-zinc-950 border ${
+                    formik.touched.message && formik.errors.message
+                      ? "border-red-500/50 focus:ring-red-500/50"
+                      : "border-zinc-800 focus:border-emerald-500/50 focus:ring-emerald-500/50"
+                  } rounded-xl p-4 text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all resize-none disabled:opacity-50 disabled:cursor-not-allowed`}
+                  placeholder="How can we help you?"
+                  {...formik.getFieldProps("message")}
+                />
+
+                {formik.touched.message && formik.errors.message && (
+                  <div className="text-red-400 text-xs mt-2">
+                    {formik.errors.message}
+                  </div>
                 )}
-              </button>
-            </div>
-          </form>
-        </motion.div>
+              </div>
 
-        {/* Footer */}
+              {/* Submit */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={submitStatus === "loading"}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 disabled:opacity-70 disabled:cursor-not-allowed group w-full sm:w-auto cursor-pointer"
+                >
+                  {submitStatus === "loading" ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                      Send Message
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </Animate>
+
         <Footer />
       </main>
     </div>

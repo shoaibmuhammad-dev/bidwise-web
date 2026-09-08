@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 
 import FormLabel from "./form/FormLabel";
 import TextArea from "./form/TextArea";
@@ -9,9 +8,9 @@ import TextInput from "./form/TextInput";
 import SelectInput from "./form/SelectInput";
 import SubmitButtons from "./form/SubmitButtons";
 import ResultSection from "./result/ResultSection";
-import { BASE_URL } from "@/lib/baseUrl";
 import { AnalysisResult, FormData } from "@/types/types";
 import ErrorMessage from "./result/ErrorMessage";
+import Animate from "../common/Animate";
 
 export default function JobAnalysisForm() {
   const [formData, setFormData] = useState<FormData>({
@@ -47,7 +46,7 @@ export default function JobAnalysisForm() {
       setAnalysisResult(null);
       setErrorMessage("");
 
-      const response = await fetch(`${BASE_URL}/analyze`, {
+      const response = await fetch(`/api/jobs/analyze`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -98,137 +97,140 @@ export default function JobAnalysisForm() {
     <>
       {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
 
-      <motion.form
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        onSubmit={handleAnalyze}
-        className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative"
-      >
-        {/* profile description */}
-        {/* Job Description */}
-        <div className="mb-6">
-          <FormLabel>Personal Profile Title + Description</FormLabel>
+      <Animate y={20}>
+        <form
+          onSubmit={handleAnalyze}
+          className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative"
+        >
+          {/* profile description */}
+          {/* Job Description */}
+          <div className="mb-6">
+            <FormLabel>Personal Profile Title + Description</FormLabel>
 
-          <TextArea
-            value={formData.userProfileDescription}
-            onChange={(e) =>
-              handleChange("userProfileDescription", e.target.value)
-            }
-            placeholder="Paste the personal profile description and tech stack and hourly rate."
-            required
+            <TextArea
+              value={formData.userProfileDescription}
+              onChange={(e) =>
+                handleChange("userProfileDescription", e.target.value)
+              }
+              placeholder="Paste the personal profile description and tech stack and hourly rate."
+              required
+            />
+          </div>
+
+          {/* Job Description */}
+          <div className="mb-6">
+            <FormLabel>Job Title + Description</FormLabel>
+
+            <TextArea
+              value={formData.jobDescription}
+              onChange={(e) => handleChange("jobDescription", e.target.value)}
+              placeholder="Paste the job TITLE and the full description here — but not the budget or the sidebar figures, those go in their own fields below."
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div>
+              <FormLabel>How much do you use AI?</FormLabel>
+
+              <SelectInput
+                value={formData.aiUsage}
+                onChange={(e) => handleChange("aiUsage", e.target.value)}
+                options={[
+                  { label: "Sometimes", value: "sometimes" },
+                  { label: "Often", value: "often" },
+                  { label: "Always", value: "always" },
+                ]}
+              />
+            </div>
+
+            <div>
+              <FormLabel>Contract Type</FormLabel>
+
+              <SelectInput
+                value={formData.contractType}
+                onChange={(e) => handleChange("contractType", e.target.value)}
+                options={[
+                  { label: "Fixed price", value: "fixed-price" },
+                  { label: "Hourly", value: "hourly" },
+                ]}
+              />
+            </div>
+
+            <div>
+              <FormLabel>Budget / Client Rate</FormLabel>
+
+              <TextInput
+                value={formData.budget}
+                onChange={(e) => handleChange("budget", e.target.value)}
+                type="text"
+                placeholder="Range as shown, e.g. 15-25"
+                helperText="Enter it exactly as the job shows it — a range like 15-25 for hourly, or a single amount like 800 for fixed."
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="space-y-6">
+              <div>
+                <FormLabel>Your Rate (USD/HR)</FormLabel>
+
+                <TextInput
+                  value={formData.hourlyRate}
+                  onChange={(e) => handleChange("hourlyRate", e.target.value)}
+                  type="text"
+                  placeholder="e.g. 50"
+                />
+              </div>
+
+              <div>
+                <FormLabel>Proposals</FormLabel>
+
+                <TextInput
+                  value={formData.proposals}
+                  onChange={(e) => handleChange("proposals", e.target.value)}
+                  type="text"
+                  placeholder="From the sidebar, e.g. 20 to 50"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <FormLabel>Competing Bids</FormLabel>
+
+                <TextInput
+                  value={formData.competingBids}
+                  onChange={(e) =>
+                    handleChange("competingBids", e.target.value)
+                  }
+                  type="text"
+                  placeholder="From sidebar: avg $17.95, low $3, high $25"
+                />
+              </div>
+
+              <div>
+                <FormLabel>Client History</FormLabel>
+
+                <TextInput
+                  value={formData.clientHistory}
+                  onChange={(e) =>
+                    handleChange("clientHistory", e.target.value)
+                  }
+                  type="text"
+                  placeholder="From sidebar: unverified, $0 spent, 0% hire rate"
+                />
+              </div>
+            </div>
+          </div>
+
+          <SubmitButtons
+            isAnalyzing={isAnalyzing}
+            analysisResult={analysisResult}
+            onClear={handleClear}
           />
-        </div>
-
-        {/* Job Description */}
-        <div className="mb-6">
-          <FormLabel>Job Title + Description</FormLabel>
-
-          <TextArea
-            value={formData.jobDescription}
-            onChange={(e) => handleChange("jobDescription", e.target.value)}
-            placeholder="Paste the job TITLE and the full description here — but not the budget or the sidebar figures, those go in their own fields below."
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div>
-            <FormLabel>How much do you use AI?</FormLabel>
-
-            <SelectInput
-              value={formData.aiUsage}
-              onChange={(e) => handleChange("aiUsage", e.target.value)}
-              options={[
-                { label: "Sometimes", value: "sometimes" },
-                { label: "Often", value: "often" },
-                { label: "Always", value: "always" },
-              ]}
-            />
-          </div>
-
-          <div>
-            <FormLabel>Contract Type</FormLabel>
-
-            <SelectInput
-              value={formData.contractType}
-              onChange={(e) => handleChange("contractType", e.target.value)}
-              options={[
-                { label: "Fixed price", value: "fixed-price" },
-                { label: "Hourly", value: "hourly" },
-              ]}
-            />
-          </div>
-
-          <div>
-            <FormLabel>Budget / Client Rate</FormLabel>
-
-            <TextInput
-              value={formData.budget}
-              onChange={(e) => handleChange("budget", e.target.value)}
-              type="text"
-              placeholder="Range as shown, e.g. 15-25"
-              helperText="Enter it exactly as the job shows it — a range like 15-25 for hourly, or a single amount like 800 for fixed."
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="space-y-6">
-            <div>
-              <FormLabel>Your Rate (USD/HR)</FormLabel>
-
-              <TextInput
-                value={formData.hourlyRate}
-                onChange={(e) => handleChange("hourlyRate", e.target.value)}
-                type="text"
-                placeholder="e.g. 50"
-              />
-            </div>
-
-            <div>
-              <FormLabel>Proposals</FormLabel>
-
-              <TextInput
-                value={formData.proposals}
-                onChange={(e) => handleChange("proposals", e.target.value)}
-                type="text"
-                placeholder="From the sidebar, e.g. 20 to 50"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div>
-              <FormLabel>Competing Bids</FormLabel>
-
-              <TextInput
-                value={formData.competingBids}
-                onChange={(e) => handleChange("competingBids", e.target.value)}
-                type="text"
-                placeholder="From sidebar: avg $17.95, low $3, high $25"
-              />
-            </div>
-
-            <div>
-              <FormLabel>Client History</FormLabel>
-
-              <TextInput
-                value={formData.clientHistory}
-                onChange={(e) => handleChange("clientHistory", e.target.value)}
-                type="text"
-                placeholder="From sidebar: unverified, $0 spent, 0% hire rate"
-              />
-            </div>
-          </div>
-        </div>
-
-        <SubmitButtons
-          isAnalyzing={isAnalyzing}
-          analysisResult={analysisResult}
-          onClear={handleClear}
-        />
-      </motion.form>
+        </form>
+      </Animate>
 
       {analysisResult && <ResultSection result={analysisResult} />}
     </>

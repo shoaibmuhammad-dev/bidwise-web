@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import Header from "./Header";
 import WarningBox from "./WarningBox";
 import Summary from "./Summary";
@@ -13,6 +12,7 @@ import Feedback from "./Feedback";
 import { scoreTier, TIER_STYLES } from "@/lib/utils";
 import { AnalysisResult } from "./types";
 import { useEffect, useRef } from "react";
+import Animate from "@/components/common/Animate";
 
 interface Props {
   result: AnalysisResult;
@@ -38,49 +38,51 @@ export default function ResultSection({ result }: Props) {
   }, [result]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="mt-16 space-y-12"
-      id="result-section"
-      ref={resultSectionRef}
-    >
-      <Header decision={result.decision} overallScore={result.overallScore} />
+    <Animate y={20}>
+      <div
+        className="mt-16 space-y-12"
+        id="result-section"
+        ref={resultSectionRef}
+      >
+        <Header decision={result.decision} overallScore={result.overallScore} />
 
-      {result.redFlags.length > 0 && (
-        <WarningBox
-          decision={result.decision}
-          redFlags={result.redFlags}
-          tierStyle={tierStyle}
+        {result.redFlags.length > 0 && (
+          <WarningBox
+            decision={result.decision}
+            redFlags={result.redFlags}
+            tierStyle={tierStyle}
+          />
+        )}
+
+        <Summary summary={result.summary} />
+
+        <AiVsYou
+          aiCanDo={result.aiCanDo}
+          humanShouldDo={result.humanShouldDo}
         />
-      )}
 
-      <Summary summary={result.summary} />
+        <Earnings
+          estimatedHours={result.estimatedHours}
+          aiHours={result.aiHours}
+          hourlyRate={result.hourlyRate}
+          jobValue={result.jobValue}
+          hoursNote={result.hoursNote}
+        />
 
-      <AiVsYou aiCanDo={result.aiCanDo} humanShouldDo={result.humanShouldDo} />
+        {result.subscores?.length ? (
+          <OverallScore subscores={result.subscores} />
+        ) : null}
 
-      <Earnings
-        estimatedHours={result.estimatedHours}
-        aiHours={result.aiHours}
-        hourlyRate={result.hourlyRate}
-        jobValue={result.jobValue}
-        hoursNote={result.hoursNote}
-      />
+        {result.strengths.length > 0 && (
+          <Strengths strengths={result.strengths} />
+        )}
 
-      {result.subscores?.length ? (
-        <OverallScore subscores={result.subscores} />
-      ) : null}
+        {result.redFlags.length > 0 && <RedFlags redFlags={result.redFlags} />}
 
-      {result.strengths.length > 0 && (
-        <Strengths strengths={result.strengths} />
-      )}
+        {result.bidAdvice && <BidAdvice bidAdvice={result.bidAdvice} />}
 
-      {result.redFlags.length > 0 && <RedFlags redFlags={result.redFlags} />}
-
-      {result.bidAdvice && <BidAdvice bidAdvice={result.bidAdvice} />}
-
-      <Feedback />
-    </motion.div>
+        <Feedback />
+      </div>
+    </Animate>
   );
 }

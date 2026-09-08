@@ -22,16 +22,18 @@ export default function Earnings({
   console.log(jobValue);
   return (
     <div>
-      <h4 className="text-lg font-mono text-zinc-500 uppercase tracking-widest mb-6 border-b border-zinc-800 pb-2">
-        Your Earnings
-      </h4>
       {jobValue !== undefined && (
-        <p className="text-sm text-zinc-300 mb-4 font-mono">
-          Job value:{" "}
-          <span className="font-bold text-zinc-100">
-            ${jobValue.toLocaleString()}
-          </span>
-        </p>
+        <>
+          <h4 className="text-lg font-mono text-zinc-500 uppercase tracking-widest mb-6 border-b border-zinc-800 pb-2">
+            Your Earnings
+          </h4>
+          <p className="text-sm text-zinc-300 mb-4 font-mono">
+            Job value:{" "}
+            <span className="font-bold text-zinc-100">
+              ${jobValue.toLocaleString()}
+            </span>
+          </p>
+        </>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 flex flex-col justify-between">

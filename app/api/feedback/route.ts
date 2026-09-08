@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-
-interface FeedbackFormData {
-  name: string;
-  email: string;
-  feedback: string;
-}
+import { getDb } from "@/lib/mongodb";
+import { FeedbackFormData } from "@/types/feedback";
+import { FeedbackDocument } from "@/models/feedback";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -18,7 +15,6 @@ const transporter = nodemailer.createTransport({
 export async function POST(request: NextRequest) {
   try {
     const body: FeedbackFormData = await request.json();
-
     const { name, email, feedback } = body;
 
     // Validate required fields
@@ -34,7 +30,6 @@ export async function POST(request: NextRequest) {
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         {
@@ -45,12 +40,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Save to MongoDB
+    const db = await getDb();
+    const doc: FeedbackDocument = {
+      name,
+      email,
+      feedback,
+      createdAt: new Date(),
+    };
+    const result = await db
+      .collection<FeedbackDocument>("feedback")
+      .insertOne(doc);
+
+    // Send notification email
     await transporter.sendMail({
-      from: email,
+      from: process.env.EMAIL_USER,
       to: process.env.CONTACT_RECEIVER_EMAIL,
       replyTo: email,
       subject: `New Feedback from ${name}`,
-
       text: `
 Name: ${name}
 Email: ${email}
@@ -58,23 +65,12 @@ Email: ${email}
 Feedback:
 ${feedback}
       `,
-
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2>New Feedback</h2>
-
-          <p>
-            <strong>Name:</strong> ${name}
-          </p>
-
-          <p>
-            <strong>Email:</strong> ${email}
-          </p>
-
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
           <h3>Feedback</h3>
-          <p>
-            ${feedback}
-          </p>
+          <p>${feedback}</p>
         </div>
       `,
     });
@@ -83,12 +79,12 @@ ${feedback}
       {
         success: true,
         message: "Feedback submitted successfully.",
+        data: { id: result.insertedId },
       },
       { status: 200 },
     );
   } catch (error) {
     console.error("feedback form error:", error);
-
     return NextResponse.json(
       {
         success: false,
