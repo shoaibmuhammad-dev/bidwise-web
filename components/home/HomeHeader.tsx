@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Logo from "../common/Logo";
+import LogoutButton from "../layout/Logout";
 
 export default function HomeHeader() {
   return (
@@ -11,7 +12,10 @@ export default function HomeHeader() {
       transition={{ duration: 0.5 }}
       className="mb-10"
     >
-      <Logo />
+      <div className="w-full flex items-center justify-between">
+        <Logo />
+        <LogoutButton />
+      </div>
 
       <div className="text-[14px] font-mono tracking-widest text-emerald-400/80 uppercase mb-4 flex items-center gap-2">
         <span>Paste any job post</span>

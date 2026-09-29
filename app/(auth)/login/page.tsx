@@ -7,12 +7,16 @@ import * as Yup from "yup";
 import { Loader2, LogIn, AlertCircle } from "lucide-react";
 import AuthLayout from "@/components/layout/AuthLayout";
 import InputField from "@/components/common/InputField";
+import axios from "axios";
+import { BASE_URL } from "@/lib/baseUrl";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "loading" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -30,13 +34,25 @@ export default function LoginPage() {
       setErrorMessage("");
 
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1500)); // fake delay
-        // Simulate error for demo purposes
-        setSubmitStatus("error");
-        setErrorMessage("Invalid email or password.");
+        await axios.post(`${BASE_URL}/auth/login`, values, {
+          withCredentials: true,
+        });
+
+        setSubmitStatus("idle");
+        router.push(`/dashboard`);
       } catch (error) {
+        console.log("login error >>> ", error);
+
         setSubmitStatus("error");
-        setErrorMessage("Failed to log in. Please try again later.");
+
+        if (axios.isAxiosError(error)) {
+          setErrorMessage(
+            error.response?.data?.message ||
+              "Failed to sign up. Please try again.",
+          );
+        } else {
+          setErrorMessage("Something went wrong. Please try again.");
+        }
       }
     },
   });

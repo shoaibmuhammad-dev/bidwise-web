@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useFormik, FormikProvider } from "formik";
 import * as Yup from "yup";
-import { Loader2, UserPlus, AlertCircle } from "lucide-react";
+import { Loader2, UserPlus, AlertCircle, CheckCircle2 } from "lucide-react";
 import AuthLayout from "@/components/layout/AuthLayout";
 import InputField from "@/components/common/InputField";
 import { BASE_URL } from "@/lib/baseUrl";
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "loading" | "error"
+    "idle" | "loading" | "error" | "success"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -40,15 +40,10 @@ export default function SignupPage() {
       setErrorMessage("");
 
       try {
-        const res = await axios.post(`${BASE_URL}/auth/signup`, values);
+        await axios.post(`${BASE_URL}/auth/signup`, values);
 
-        console.log(res);
-        setSubmitStatus("idle");
-        router.push(`/check-email?email=${encodeURIComponent(values.email)}`);
-        // TODO: redirect / show success state here
+        setSubmitStatus("success");
       } catch (error) {
-        console.log("Signup error >>> ", error);
-
         setSubmitStatus("error");
 
         if (axios.isAxiosError(error)) {
@@ -79,6 +74,27 @@ export default function SignupPage() {
               Registration failed
             </h3>
             <p className="text-xs text-red-200/70">{errorMessage}</p>
+          </div>
+        </div>
+      )}
+
+      {submitStatus === "success" && (
+        <div
+          className="mb-6 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-start gap-3"
+          role="status"
+          aria-live="polite"
+        >
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+
+          <div>
+            <h3 className="text-emerald-400 font-medium mb-1 text-sm">
+              Check your email
+            </h3>
+
+            <p className="text-xs text-emerald-200/70">
+              Email verification link has been sent. Please check your inbox or
+              spam folder.
+            </p>
           </div>
         </div>
       )}
