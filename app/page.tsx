@@ -2,7 +2,6 @@ import HomeHeader from "@/components/home/HomeHeader";
 import BetaBanner from "@/components/home/BetaBanner";
 import JobAnalysisForm from "@/components/home/JobAnalysisForm";
 import Footer from "@/components/home/Footer";
-import Feedback from "@/components/home/result/Feedback";
 
 export default function Home() {
   return (
@@ -16,10 +15,6 @@ export default function Home() {
         <BetaBanner />
 
         <JobAnalysisForm />
-
-        {/* <PromoBox /> */}
-
-        {/* <Feedback /> */}
 
         <Footer />
       </main>

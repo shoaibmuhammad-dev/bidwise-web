@@ -1,16 +1,8 @@
-"use client";
-
-import { motion } from "motion/react";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <motion.footer
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.4 }}
-      className="mt-16 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-600 uppercase tracking-widest"
-    >
+    <footer className="mt-16 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-600 uppercase tracking-widest">
       <div>
         <Link href={"/"}>bidwise</Link> • beta
       </div>
@@ -27,6 +19,6 @@ export default function Footer() {
           Contact
         </Link>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

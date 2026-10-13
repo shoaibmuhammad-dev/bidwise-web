@@ -1,18 +1,10 @@
-"use client";
-
-import { motion } from "motion/react";
 import Logo from "../common/Logo";
 import LogoutButton from "../layout/Logout";
 
 export default function HomeHeader() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="mb-10"
-    >
-      <div className="w-full flex items-center justify-between">
+    <div className="mb-10">
+      <div className="w-full flex items-start justify-between">
         <Logo />
         <LogoutButton />
       </div>
@@ -31,6 +23,6 @@ export default function HomeHeader() {
         Paste a job post to see how much AI can do for you, what it does to your
         hourly rate, and what to bid.
       </p>
-    </motion.div>
+    </div>
   );
 }

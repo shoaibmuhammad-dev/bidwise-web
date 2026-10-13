@@ -96,12 +96,7 @@ export default function ContactPage() {
           description="Have questions about bidwise or need support? Fill out the form below and we'll get back to you as soon as possible."
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative"
-        >
+        <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative">
           {/* Success Message */}
           {submitStatus === "success" && <Success />}
 
@@ -225,7 +220,7 @@ export default function ContactPage() {
               </button>
             </div>
           </form>
-        </motion.div>
+        </div>
 
         {/* Footer */}
         <Footer />

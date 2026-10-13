@@ -27,7 +27,7 @@ export default function VerifyEmailPage() {
       .then(async (res) => {
         const body = await res.json();
         if (res.ok) {
-          router.push("/");
+          router.push("/dashboard");
         } else {
           setStatus("error");
           setMessage(body.message);

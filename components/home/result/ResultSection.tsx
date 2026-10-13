@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import Header from "./Header";
 import WarningBox from "./WarningBox";
 import Summary from "./Summary";
@@ -38,10 +37,7 @@ export default function ResultSection({ result }: Props) {
   }, [result]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+    <div
       className="mt-16 space-y-12"
       id="result-section"
       ref={resultSectionRef}
@@ -81,6 +77,6 @@ export default function ResultSection({ result }: Props) {
       {result.bidAdvice && <BidAdvice bidAdvice={result.bidAdvice} />}
 
       <Feedback />
-    </motion.div>
+    </div>
   );
 }

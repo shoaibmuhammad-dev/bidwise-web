@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
-
 import FormLabel from "./form/FormLabel";
 import TextArea from "./form/TextArea";
 import TextInput from "./form/TextInput";
@@ -98,10 +96,7 @@ export default function JobAnalysisForm() {
     <>
       {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
 
-      <motion.form
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+      <form
         onSubmit={handleAnalyze}
         className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative"
       >
@@ -228,7 +223,7 @@ export default function JobAnalysisForm() {
           analysisResult={analysisResult}
           onClear={handleClear}
         />
-      </motion.form>
+      </form>
 
       {analysisResult && <ResultSection result={analysisResult} />}
     </>

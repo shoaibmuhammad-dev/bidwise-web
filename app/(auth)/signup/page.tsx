@@ -35,7 +35,7 @@ export default function SignupPage() {
         .max(128, "Password cannot be more than 128 characters"),
     }),
 
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       setSubmitStatus("loading");
       setErrorMessage("");
 
@@ -43,6 +43,7 @@ export default function SignupPage() {
         await axios.post(`${BASE_URL}/auth/signup`, values);
 
         setSubmitStatus("success");
+        resetForm();
       } catch (error) {
         setSubmitStatus("error");
 

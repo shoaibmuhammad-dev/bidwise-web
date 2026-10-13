@@ -11,32 +11,33 @@ interface LogoutButtonProps {
 }
 
 export default function LogoutButton({ onSuccess }: LogoutButtonProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogout = async (): Promise<void> => {
+  const handleLogout = async () => {
     setIsLoading(true);
-    setError(null);
 
     try {
       await logoutWithAxios();
+
       onSuccess?.();
+
       router.replace("/login");
-      router.refresh();
     } catch (error) {
       if (axios.isAxiosError<{ message?: string }>(error)) {
-        const message = error.response?.data?.message ?? error.message;
+        const message = error.response?.data?.message ?? "Failed to logout";
 
-        enqueueSnackbar(message, { variant: "error" });
-
-        if (message === "Email is already verified") {
-          router.push("/");
-        }
+        enqueueSnackbar(message, {
+          variant: "error",
+        });
       } else if (error instanceof Error) {
-        enqueueSnackbar(error.message, { variant: "error" });
+        enqueueSnackbar(error.message, {
+          variant: "error",
+        });
       } else {
-        enqueueSnackbar("Something went wrong", { variant: "error" });
+        enqueueSnackbar("Something went wrong", {
+          variant: "error",
+        });
       }
     } finally {
       setIsLoading(false);
@@ -44,11 +45,13 @@ export default function LogoutButton({ onSuccess }: LogoutButtonProps) {
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleLogout} disabled={isLoading}>
-        {isLoading ? "Logging out..." : "Logout"}
-      </button>
-      {error && <p role="alert">{error}</p>}
-    </div>
+    <button
+      type="button"
+      onClick={handleLogout}
+      disabled={isLoading}
+      className="bg-red-500/20 text-red-500 px-4 py-3 leading-none text-sm rounded-lg font-semibold disabled:opacity-50"
+    >
+      {isLoading ? "Logging out..." : "Logout"}
+    </button>
   );
 }
