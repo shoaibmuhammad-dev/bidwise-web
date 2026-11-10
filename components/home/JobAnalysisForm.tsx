@@ -42,6 +42,11 @@ export default function JobAnalysisForm() {
   const handleAnalyze = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!BASE_URL) {
+      setErrorMessage("BASE_URL is not defined");
+      return;
+    }
+
     try {
       setIsAnalyzing(true);
       setAnalysisResult(null);
